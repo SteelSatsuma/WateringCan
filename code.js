@@ -189,11 +189,10 @@ const TimeController = {
     });
   },
   readCurrentTime: function() {
-    E.setTimeZone(1);
+    E.setTimeZone(0);
     const currentTime = Storage.readJSON(this.currentTimeFilename, true);
     if (currentTime) {
-      setTime(new Date(currentTime.timestamp).getTime()/1000 + 3600);
-      // for some reason, a drift of 1h occurs at this point
+      setTime(new Date(currentTime.timestamp).getTime()/1000);
     }
   },
   writeWateringData: function() {
@@ -209,6 +208,8 @@ const TimeController = {
     if (data) {
       this.wateringCounter = data.counter;
       this.lastWateredTime = new Date(data.timestamp);
+    } else {
+      this.resetWateringTime();
     }
 
     // run check if counter * watering amount >= total tank capacity
